@@ -479,4 +479,15 @@ public class SurefirePlugin
     {
         this.includes = includes;
     }
+    
+    // hack to support passing in additional classpath from gwt maven plugin (which is also hacked!)
+    public void execute() throws MojoExecutionException, MojoFailureException
+    {
+    	// fallback to a mojo property
+    	if (getAdditionalClasspathElements() == null || getAdditionalClasspathElements().length == 0) {
+    		String[] properties = (String[]) getProject().getProperties().get("maven.test.additionalClasspath");
+    		setAdditionalClasspathElements(properties);
+    	}
+    	super.execute();
+    }
 }
